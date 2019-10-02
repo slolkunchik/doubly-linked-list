@@ -25,7 +25,7 @@ class LinkedList {
             }
         }
         this.length += 1;
-
+        return this;
     }
 
     head() {
@@ -48,13 +48,15 @@ class LinkedList {
              if(curNode !== null){
                  return curNode.data;
              }
+        } else {
+            return undefined;
         }
     }
 
     insertAt(index, data) {
 
         if (index > -1) {
-            const newNode= new Node(data);
+            const newNode = new Node(data);
             let curNode = this._head;
             let i = 0;
             while ((curNode !== null) && (i < index)) {
@@ -73,6 +75,7 @@ class LinkedList {
             newNode.next = curNode;
         }
 
+        return this;
     }
 
     isEmpty() {
@@ -85,11 +88,63 @@ class LinkedList {
         this._tail.data = null;
     }
 
-    deleteAt(index) {}
+    deleteAt(index) {
+        if (index > 0) {
+            let curNode = this._head;
+            let i = 0;
+            while ((curNode !== null) && (i < index)) {
+                curNode = curNode.next;
+                i++;
+            }
 
-    reverse() {}
+            if (curNode.prev === null) {
+                this._head = curNode.next;
+            } else {
+                curNode.prev.next = curNode.next;
+            }
 
-    indexOf(data) {}
+            if(curNode.next === null) {
+                this._tail = curNode.prev;
+            } else {
+                curNode.next.prev = curNode.prev;
+            }
+        } else {
+            return undefined;
+        }
+        return this;
+    }
+
+    reverse() {
+        let curNode = this._head;
+        this._tail = curNode;
+
+        while (curNode !== null) {
+            let temp = curNode.prev;
+            curNode.prev = curNode.next;
+            curNode.next = temp;
+
+            if (curNode.prev !== null) {
+                curNode = curNode.prev;
+            } else {
+                this._head = curNode;
+                break;
+            }
+        }
+        return this;
+    }
+
+    indexOf(data) {
+        let curNode = this._head;
+        let i = 0;
+        while ((curNode !== null) && (i < this.length)) {
+            if (curNode.data === data) {
+                return i;
+            }
+            curNode = curNode.next;
+            i++;
+        }
+        return -1;
+    }
 }
 
 module.exports = LinkedList;
